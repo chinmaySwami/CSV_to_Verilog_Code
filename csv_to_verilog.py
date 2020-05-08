@@ -1,12 +1,23 @@
 import pandas as pd
 
-df = pd.read_csv('DT_MDL4.csv', index_col=False,
+# Removeing starting spaces in notepad++
+#      Find : ^\s+
+# Search mode -- tick regular expression
+
+# Enter csv file name
+csv_file_name = 'DT_MDL4.csv'
+
+# Verilog File name
+verilog_file_name = 'dummy_test.v'
+
+df = pd.read_csv(csv_file_name, index_col=False,
                  names=["ID", "p_if/class", "p_condition", "p_then", "p_node",
                                        "c_ID", "c_elif", "c_condition", "c_then", "c_node", "cc_ID",
                                        "cc_else","f_val"])
 
 # print(df.columns)
 # print(df)
+
 
 df["ID"] = df["ID"].astype('float32')
 
@@ -41,5 +52,9 @@ for index, row in ndf.iterrows():
             code = code.replace("$*" + str(row[0]) + "*$", strs)
 
 
-
+code += "\n "+ "end \n"+ "endmodule"
 print(code)
+
+# Writing the code to file
+with open(verilog_file_name, "a") as f:
+    f.write(code)
